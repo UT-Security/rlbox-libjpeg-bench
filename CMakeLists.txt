@@ -65,6 +65,9 @@ foreach(ARCH ${CMAKE_OSX_ARCHITECTURES})
   endif()
   math(EXPR COUNT "${COUNT}+1")
 endforeach()
+
+if (NOT DEFINED CPU_TYPE)
+
 if(CMAKE_SYSTEM_PROCESSOR_LC MATCHES "x86_64" OR
   CMAKE_SYSTEM_PROCESSOR_LC MATCHES "amd64" OR
   CMAKE_SYSTEM_PROCESSOR_LC MATCHES "i[0-9]86" OR
@@ -101,6 +104,8 @@ if(CMAKE_OSX_ARCHITECTURES MATCHES "ppc")
 endif()
 if(MSVC_IDE AND CMAKE_GENERATOR_PLATFORM MATCHES "arm64")
   set(CPU_TYPE arm64)
+endif()
+
 endif()
 
 message(STATUS "${BITS}-bit build (${CPU_TYPE})")
@@ -187,6 +192,8 @@ option(ENABLE_STATIC "Build static libraries" TRUE)
 boolean_number(ENABLE_STATIC)
 option(REQUIRE_SIMD "Generate a fatal error if SIMD extensions are not available for this platform (default is to fall back to a non-SIMD build)" FALSE)
 boolean_number(REQUIRE_SIMD)
+option(IS_WASM_BUILD "This is a Wasm build" FALSE)
+boolean_number(IS_WASM_BUILD)
 option(WITH_12BIT "Encode/decode JPEG images with 12-bit samples (implies WITH_ARITH_DEC=0 WITH_ARITH_ENC=0 WITH_JAVA=0 WITH_SIMD=0 WITH_TURBOJPEG=0 )" FALSE)
 boolean_number(WITH_12BIT)
 option(WITH_ARITH_DEC "Include arithmetic decoding support when emulating the libjpeg v6b API/ABI" TRUE)
@@ -479,7 +486,7 @@ if(WITH_TURBOJPEG)
   endif()
 endif()
 
-if(UNIX AND NOT APPLE)
+if(UNIX AND NOT APPLE AND NOT IS_WASM_BUILD)
   file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/conftest.map "VERS_1 { global: *; };")
   set(CMAKE_REQUIRED_FLAGS
     "-Wl,--version-script,${CMAKE_CURRENT_BINARY_DIR}/conftest.map")

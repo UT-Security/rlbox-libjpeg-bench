@@ -1,0 +1,9 @@
+build_*/
+benchmark/test_bytes.h
+benchmark/rlbox
+benchmark/rlbox_wasm2c_sandbox
+benchmark/wabt
+benchmark/wasi-sdk
+benchmark/generate_test_out
+benchmark/test_out.jpeg
+benchmark/wasi-sdk-21.0-linux.tar.gz

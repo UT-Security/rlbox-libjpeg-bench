@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.fst": "ocaml",
+        "*.fsti": "ocaml",
+        "chrono": "cpp",
+        "vector": "cpp",
+        "libjpeg.wasm.h": "c"
+    }
+}
